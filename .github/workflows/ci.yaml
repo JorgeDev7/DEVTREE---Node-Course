@@ -1,0 +1,37 @@
+name: CI - Validaciones de Código
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  lint-and-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout del código
+        uses: actions/checkout@v4
+
+      - name: 🔨 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: 📦 Instalar dependencias
+        run: npm install
+
+      - name: 🎨 Ejecutar Prettier
+        run: npx prettier --check .
+
+      - name: 🔍 Ejecutar ESLint
+        run: npx eslint . --ext .ts,.tsx,.js,.jsx
+
+      - name: 🔐 Auditoría de dependencias
+        run: npm audit --audit-level=high
