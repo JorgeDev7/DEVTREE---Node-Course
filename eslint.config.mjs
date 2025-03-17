@@ -10,7 +10,10 @@ export default [
   ...tseslint.configs.recommended,
   {
     rules: {
-      "no-unused-vars": ["warn", { argsIgnorePattern: "^req|res|next$" }]
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^req|res|next$" }
+      ]
     }
   }
 ];
