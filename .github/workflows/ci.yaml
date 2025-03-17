@@ -27,5 +27,11 @@ jobs:
       - name: 📦 Instalar dependencias
         run: npm install
 
-      - name: Validadores
-        run: npm run validate
+      - name: 🎨 Ejecutar Prettier
+        run: npx prettier --check .
+
+      - name: 🔍 Ejecutar ESLint
+        run: npx eslint . --ext .ts,.tsx,.js,.jsx
+
+      - name: 🔐 Auditoría de dependencias
+        run: npm audit --audit-level=high
