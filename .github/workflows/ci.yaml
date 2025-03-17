@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      - develop
+      - dev
   pull_request:
     branches:
       - main
-      - develop
+      - dev
 
 jobs:
   lint-and-audit:
@@ -21,17 +21,11 @@ jobs:
       - name: 🔨 Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: "npm"
 
       - name: 📦 Instalar dependencias
         run: npm install
 
-      - name: 🎨 Ejecutar Prettier
-        run: npx prettier --check .
-
-      - name: 🔍 Ejecutar ESLint
-        run: npx eslint . --ext .ts,.tsx,.js,.jsx
-
-      - name: 🔐 Auditoría de dependencias
-        run: npm audit --audit-level=high
+      - name: Validadores
+        run: npm run validate
