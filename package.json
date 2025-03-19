@@ -16,7 +16,10 @@
   "author": "Jorge Colindres",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.12.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
