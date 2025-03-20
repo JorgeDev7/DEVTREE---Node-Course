@@ -1,5 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
+interface IUser {
+  name: string;
+  email: string;
+  password: string;
+}
+
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -19,4 +25,4 @@ const UserSchema = new Schema({
   }
 });
 
-export const User = mongoose.model("User", UserSchema);
+export const User = mongoose.model<IUser>("User", UserSchema);
