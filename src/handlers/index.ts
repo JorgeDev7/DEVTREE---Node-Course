@@ -1,22 +1,10 @@
 import type { Request, Response } from "express";
-import { validationResult } from "express-validator";
 import slugify from "slugify";
 import { User } from "../models/User";
-import { hashPassword } from "../utils/auth";
+import { checkPassword, hashPassword } from "../utils/auth";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    // Handle errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      res.status(400).json({
-        error: true,
-        errorMessage: "Valores de creación requeridos",
-        data: errors.array()
-      });
-      return;
-    }
-
     const { email, password } = req.body;
     const userExist = await User.findOne({ email });
     if (userExist) {
@@ -45,17 +33,11 @@ export const registerUser = async (req: Request, res: Response) => {
     user.password = await hashPassword(password);
     user.handle = handle;
 
-    const savedUser = await user.save();
-    const {
-      password: userPassword,
-      __v,
-      ...clearedData
-    } = savedUser.toObject();
-
+    const userData = await user.save();
     res.status(201).json({
       error: false,
       message: "Usuario registrado exitosamente",
-      data: clearedData
+      data: userData
     });
   } catch (error) {
     console.error(error);
@@ -65,4 +47,34 @@ export const registerUser = async (req: Request, res: Response) => {
       errorMessage: "No se pudo registrar al usuario, intentalo más tarde"
     });
   }
+};
+
+export const loginUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(401).json({
+      error: true,
+      errorMessage:
+        "No se hayaron coincidencias para el usuario y la contraseña"
+    });
+    return;
+  }
+
+  const passwordMatch = await checkPassword(password, user.password);
+  if (!passwordMatch) {
+    res.status(401).json({
+      error: true,
+      errorMessage:
+        "No se hayaron coincidencias para el usuario y la contraseña"
+    });
+    return;
+  }
+
+  res.status(200).json({
+    error: false,
+    message: "Inicio de sesión exitoso",
+    data: user
+  });
 };
