@@ -61,8 +61,7 @@ export const loginUser = async (req: Request, res: Response) => {
   if (!user) {
     res.status(401).json({
       error: true,
-      errorMessage:
-        "No se hayaron coincidencias para el usuario y la contraseña"
+      errorMessage: "Usuario no encontrado"
     });
     return;
   }
@@ -71,8 +70,7 @@ export const loginUser = async (req: Request, res: Response) => {
   if (!passwordMatch) {
     res.status(401).json({
       error: true,
-      errorMessage:
-        "No se hayaron coincidencias para el usuario y la contraseña"
+      errorMessage: "Contraseña incorrecta"
     });
     return;
   }
