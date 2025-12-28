@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import slugify from "slugify";
 import { User } from "../models/User";
 import { checkPassword, hashPassword } from "../utils/auth";
+import { generateJWT } from "../utils/jwt";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -75,9 +76,12 @@ export const loginUser = async (req: Request, res: Response) => {
     return;
   }
 
+  const token = generateJWT({ id: user._id });
+
   res.status(200).json({
     error: false,
     message: "Inicio de sesión exitoso",
-    data: user
+    data: user,
+    token
   });
 };
