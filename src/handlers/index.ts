@@ -4,7 +4,10 @@ import { User } from "../models/User";
 import { checkPassword, hashPassword } from "../utils/auth";
 import { generateJWT } from "../utils/jwt";
 
-export const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { email, password } = req.body;
     const userExist = await User.findOne({ email });
@@ -55,7 +58,7 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-export const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -83,5 +86,13 @@ export const loginUser = async (req: Request, res: Response) => {
     message: "Inicio de sesión exitoso",
     data: user,
     token
+  });
+};
+
+export const getUser = async (req: Request, res: Response): Promise<void> => {
+  res.status(200).json({
+    error: false,
+    message: "Usuario obtenido exitosamente",
+    data: req.user
   });
 };
